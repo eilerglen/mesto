@@ -3,11 +3,10 @@ let popupEdit = document.querySelector(".popup_edit");
 let popupNewCard = document.querySelector('.popup_new-card');
 let popupImage = document.querySelector('.popup_image');
 
-let popupNewCard = document.querySelector('.popup_new-card');
 /*Кнопки открытия попапов */ 
 let editButton = document.querySelector('.profile__edit-button');
 let addButton = document.querySelector('.profile__add-button');
-let imageButton = document.querySelector('.profile__add-button');
+/*let imageButton = document.querySelector('.profile__add-button');*/
 
 /*Кнопки закрытия попапов */ 
 let popupCloseEdit = popupEdit.querySelector('.popup__close');
@@ -99,15 +98,60 @@ const initialCards = [
   }
 ]; 
 
+/*Обозначаем контейнер, куда карточки могут добавляться*/ 
 const placesList = document.querySelector('.places__list');
-const templateCard = document.querySelector('#template-card').content;
 
+/*Функция создания карточки*/ 
+function createCard(data) {
+  const templatePlace = document.querySelector('#template-place').content;
+  let placeItem = templatePlace.querySelector('.place').cloneNode(true);
+
+  /*берем данные из словаря или формы для рендеринга контента карточки*/
+  const placeImg = placeItem.querySelector('.place__img');
+  const placeTitle = placeItem.querySelector('.place__title');
+  placeImg.setAttribute('src', data.link);
+  placeImg.setAttribute('alt', data.name);
+  placeTitle.textContent = data.name;
+
+ /*Вешаем обработчик на кнопку лайка. Здесь можно простой колбэк*/
+  const placeIconLike = placeItem.querySelector('.place__icon');
+  placeIconLike.addEventListener('click', function(evt) {
+    evt.target.classList.toggle('.place__icon_active');
+
+  });
+ 
+ /*Вешаем обработчик на удаление карточки. Здесь можно простой колбэк или запилить отдельную функцию*/
+  const placeDeleteButton = placeItem.querySelector('.place__delete-button');
+
+  placeDeleteButton.addEventListener('click', function() {
+    const deletePlaceItem = placeDeleteButton.closest('.place');
+    deletePlaceItem.remove();
+  });
+
+  return placeItem;
+}
+
+/*Функция добавления карточки на страницу*/ 
+function addCard (data, container) {
+  const place = createCard(data);
+  container.prepend(place);
+}
 
 /*Добавление массива карточек */ 
 
+initialCards.forEach((item) => {
+  addCard(item, placesList)
+});
 
-/*Добавление картчоки на страницу */ 
+/*Функция сохранения */
+function addFormSubmit (evt) {
+  evt.preventDefault();
 
+  
+  closePopup(popupNewCard);
 
-/*Удаление карточек со страницы */ 
+}
+
+formEditProfileInfo.addEventListener('submit', editFormSubmit);
+
 
