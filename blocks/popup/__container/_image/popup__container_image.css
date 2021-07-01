@@ -1,0 +1,6 @@
+.popup__container_image {
+    width: 75vw;
+    height: 75vh;
+    display: flex;
+    background-size: cover;
+}
