@@ -26,6 +26,8 @@ function closePopup(popup) {
 
 //Открытие popup редактирования
 editButton.addEventListener('click', () => {
+  inputEditProfileName.value = profileName.textContent;
+  inputEditProfileProf.value = profileProfession.textContent;
   openPopup(popupEdit);
   
 });
@@ -115,7 +117,7 @@ function createCard(data) {
   let placeIconLike = placeItem.querySelector('.place__icon');
   placeIconLike.addEventListener('click', function(evt) {
     const eventTarget = evt.target;
-    eventTarget.classList.toggle('.place__icon_active');
+    eventTarget.classList.toggle('place__icon_active');
   });
  
  /*Вешаем обработчик на удаление карточки. Здесь можно простой колбэк или запилить отдельную функцию*/
