@@ -2,6 +2,8 @@
 let popupEdit = document.querySelector(".popup_edit");
 let popupNewCard = document.querySelector('.popup_new-card');
 let popupImage = document.querySelector('.popup_image');
+let placeImageScale = popupImage.querySelector('.popup__image');
+let placeImageScaleCaption = popupImage.querySelector('.popup__caption');
 
 /*Кнопки открытия попапов */ 
 let editButton = document.querySelector('.profile__edit-button');
@@ -11,6 +13,7 @@ let addButton = document.querySelector('.profile__add-button');
 /*Кнопки закрытия попапов */ 
 let popupCloseEdit = popupEdit.querySelector('.popup__close');
 let popupCloseNewCard = popupNewCard.querySelector('.popup__close');
+let popupCloseImage = popupImage.querySelector('.popup__close');
 //обработка открытия popup
 function openPopup(popup) {
   popup.classList.add('popup_opened')
@@ -32,11 +35,6 @@ addButton.addEventListener('click', () => {
   openPopup(popupNewCard);
 });
 
-//Открытие popup крупной картинки
-editButton.addEventListener('click', () => {
-  openPopup(popupEdit);
-  
-});
 
 //Закрытие popup редактирования
 popupCloseEdit.addEventListener('click', () => {
@@ -103,29 +101,43 @@ const placesList = document.querySelector('.places__list');
 
 /*Функция создания карточки*/ 
 function createCard(data) {
-  const templatePlace = document.querySelector('#template-place').content;
+  let templatePlace = document.querySelector('#template-place').content;
   let placeItem = templatePlace.querySelector('.place').cloneNode(true);
 
   /*берем данные из словаря или формы для рендеринга контента карточки*/
-  const placeImg = placeItem.querySelector('.place__img');
-  const placeTitle = placeItem.querySelector('.place__title');
+  let placeImg = placeItem.querySelector('.place__img');
+  let placeTitle = placeItem.querySelector('.place__title');
   placeImg.setAttribute('src', data.link);
   placeImg.setAttribute('alt', data.name);
   placeTitle.textContent = data.name;
 
  /*Вешаем обработчик на кнопку лайка. Здесь можно простой колбэк*/
-  const placeIconLike = placeItem.querySelector('.place__icon');
+  let placeIconLike = placeItem.querySelector('.place__icon');
   placeIconLike.addEventListener('click', function(evt) {
-    evt.target.classList.toggle('.place__icon_active');
-
+    const eventTarget = evt.target;
+    eventTarget.classList.toggle('.place__icon_active');
   });
  
  /*Вешаем обработчик на удаление карточки. Здесь можно простой колбэк или запилить отдельную функцию*/
-  const placeDeleteButton = placeItem.querySelector('.place__delete-button');
+  let placeDeleteButton = placeItem.querySelector('.place__delete-button');
 
   placeDeleteButton.addEventListener('click', function() {
-    const deletePlaceItem = placeDeleteButton.closest('.place');
+    let deletePlaceItem = placeDeleteButton.closest('.place');
     deletePlaceItem.remove();
+  });
+ //Открытие popup картинки
+  placeImg.addEventListener('click', () => {
+    placeImageScale.src = data.link;
+    placeImageScale.alt = data.name;
+    placeImageScaleCaption.textContent = data.name;
+    openPopup(popupImage); 
+    
+
+
+  });
+  //Закрытие popup картинки
+  popupCloseImage.addEventListener('click', () => {
+  closePopup(popupImage)
   });
 
   return placeItem;
@@ -133,7 +145,7 @@ function createCard(data) {
 
 /*Функция добавления карточки на страницу*/ 
 function addCard (data, container) {
-  const place = createCard(data);
+  let place = createCard(data);
   container.prepend(place);
 }
 
@@ -143,15 +155,20 @@ initialCards.forEach((item) => {
   addCard(item, placesList)
 });
 
-/*Функция сохранения */
+/*Задаем переменные для DOM формы и полей создания карточки*/
+
+let formAddNewPlace = popupNewCard.querySelector('.popup__form');
+let inputAddTitle = popupNewCard.querySelector('#place');
+let inputAddLink = popupNewCard.querySelector('#link');
+
+/*Функция создания новой карточки*/
 function addFormSubmit (evt) {
   evt.preventDefault();
-
-  
+  addCard(data = {name: inputAddTitle.value, link: inputAddLink.value}, placesList)
   closePopup(popupNewCard);
 
 }
 
-formEditProfileInfo.addEventListener('submit', editFormSubmit);
+formAddNewPlace.addEventListener('submit', addFormSubmit);
 
 
