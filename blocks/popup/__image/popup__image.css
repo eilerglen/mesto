@@ -5,10 +5,3 @@
     display: block;
 }
 
-
-@media screen and (max-width: 760px) {
-    .popup__image {
-      object-fit: cover;
-    }
-  }
-  

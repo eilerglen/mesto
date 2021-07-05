@@ -14,6 +14,13 @@ let addButton = document.querySelector('.profile__add-button');
 let popupCloseEdit = popupEdit.querySelector('.popup__close');
 let popupCloseNewCard = popupNewCard.querySelector('.popup__close');
 let popupCloseImage = popupImage.querySelector('.popup__close');
+
+/*Задаем переменные для DOM формы и полей создания карточки*/
+
+let formAddNewPlace = popupNewCard.querySelector('.popup__form');
+let inputAddTitle = popupNewCard.querySelector('#place');
+let inputAddLink = popupNewCard.querySelector('#link');
+
 //обработка открытия popup
 function openPopup(popup) {
   popup.classList.add('popup_opened')
@@ -59,7 +66,7 @@ let inputEditProfileProf = popupEdit.querySelector('#user-profession');
 
 
 
-/*Функция сохранения */
+/*Функция редактирования профиля */
 function editFormSubmit (evt) {
   evt.preventDefault();
   profileName.textContent = inputEditProfileName.value;
@@ -68,44 +75,16 @@ function editFormSubmit (evt) {
 
 }
 
+/* Вызываем функцию редактирования профиля как колбэке на обработчике формы*/
 formEditProfileInfo.addEventListener('submit', editFormSubmit);
-
-/*Массив карточек */ 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-]; 
 
 /*Обозначаем контейнер, куда карточки могут добавляться*/ 
 const placesList = document.querySelector('.places__list');
+let templatePlace = document.querySelector('#template-place').content;
 
 /*Функция создания карточки*/ 
 function createCard(data) {
-  let templatePlace = document.querySelector('#template-place').content;
   let placeItem = templatePlace.querySelector('.place').cloneNode(true);
-
   /*берем данные из словаря или формы для рендеринга контента карточки*/
   let placeImg = placeItem.querySelector('.place__img');
   let placeTitle = placeItem.querySelector('.place__title');
@@ -151,19 +130,16 @@ function addCard (data, container) {
   container.prepend(place);
 }
 
-/*Добавление массива карточек */ 
+
+/*Вызов функции добавления карточек "из коробки на страницу" на страницу в цикле по массиву*/ 
 
 initialCards.forEach((item) => {
   addCard(item, placesList)
 });
 
-/*Задаем переменные для DOM формы и полей создания карточки*/
 
-let formAddNewPlace = popupNewCard.querySelector('.popup__form');
-let inputAddTitle = popupNewCard.querySelector('#place');
-let inputAddLink = popupNewCard.querySelector('#link');
 
-/*Функция создания новой карточки*/
+/*Вызов функции создания новой карточки*/
 function addFormSubmit (evt) {
   evt.preventDefault();
   addCard(data = {name: inputAddTitle.value, link: inputAddLink.value}, placesList)
